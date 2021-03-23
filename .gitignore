@@ -1,0 +1,10 @@
+__pycache__/
+.vs/
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln
+*.filters
+
