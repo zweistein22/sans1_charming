@@ -30,11 +30,11 @@ class CharmTimerChannel(TimerChannel):
         return state
 
     def doStart(self):
-#        self.started = time.time()
+        time.sleep(0.5)
         super().doStart()
 
-    def doStop(self):
-        super.doStop()
+ #   def doStop(self):
+ #       super.doStop()
 
 
 class CharmCounterChannel(CounterChannel):

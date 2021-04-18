@@ -1,4 +1,4 @@
-import nicos_mlz.erwin_charming.nicospath as nicospath
+import nicos_mlz.sans1_charming.nicospath as nicospath
 
 description = 'system setup'
 
@@ -32,7 +32,7 @@ devices = dict(
         description = 'experiment object',
         dataroot = nicospath.NicosPath.data_dir(),
         sendmail = False,
-        serviceexp = 'service',
+        serviceexp = 'servicesans1',
         sample = 'Sample',
     ),
     filesink = device('nicos.devices.datasinks.AsciiScanfileSink'),

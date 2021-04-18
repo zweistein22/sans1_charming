@@ -14,11 +14,12 @@ from functools import partial
 
 import nicos_mlz.sans1_charming.gui.clients.panels.roieditor as roieditor
 import nicos_mlz.sans1_charming.gui.clients.panels.imagecompare as imagecompare
-
+import nicos_mlz.sans1_charming.gui.clients.panels.playlisteditor as playlisteditor
 
 charmpowersupply  = 'nicos_mlz.erwin_charming.devices.charm_HV.CharmPowerSupply' #c p s
 roimanager = 'nicos_mlz.sans1_charming.devices.roimanager.RoiManager'
 compareimage = 'nicos_mlz.sans1_charming.devices.compare.Image'
+playlistmanager = 'nicos_mlz.sans1_charming.devices.playlist.Manager'
 
 class DevicesPanel1(DevicesPanel):
 
@@ -89,7 +90,34 @@ class DevicesPanel1(DevicesPanel):
                 self.cpsmenu.addAction(self.actionHelp)
                 self.cpsmenu.popup(self.tree.viewport().mapToGlobal(point))
                 return
+
+            if playlistmanager in self._devinfo[ldevname].classes:
+                params = self.client.getDeviceParams(ldevname)
+                self.cpsmenu = QMenu()
+                self.cps_actions = []
+                self.cps_actions.append(QAction('Edit...'))
+                self.cpsmenu.addAction(self.cps_actions[0])
+                self.cps_actions[0].triggered.connect(partial(self.on_playlist_edit,ldevname))
+                self.cpsmenu.addSeparator()
+                self.cpsmenu.addAction(self.actionMove)
+                self.cpsmenu.addAction(self.actionReset)
+                self.cpsmenu.addSeparator()
+                if self.mainwindow.history_wintype is not None:
+                    self.cpsmenu.addAction(self.actionPlotHistory)
+                self.cpsmenu.addSeparator()
+                self.cpsmenu.addAction(self.actionShutDown)
+                self.cpsmenu.addAction(self.actionHelp)
+                self.cpsmenu.popup(self.tree.viewport().mapToGlobal(point))
+                return
+
         return super().on_tree_customContextMenuRequested( point)
+
+    @pyqtSlot()
+    def on_playlist_edit(self,ldevname):
+        if not playlisteditor.win:
+            playlisteditor.win = playlisteditor.Window(self.client, ldevname)
+            playlisteditor.win.show()
+
 
     @pyqtSlot()
     def on_images_compare(self,ldevname):

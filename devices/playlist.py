@@ -103,3 +103,36 @@ class Manager(StringIO,Readable):
              toadd = argv[0]
         return self.internCommunicate("AddFile",toadd)
 
+
+    @usermethod
+    def setting(self,*argv):
+        """ read or write setting,  read: '0' or 'settingname'.
+                               write: 'settingname:value' .
+        """
+        index = -1
+        __ALL_ATTRIBUTES__ = ['speedmultiplier']
+
+        if not len(argv):
+            print('available:')
+            for rd in __ALL_ATTRIBUTES__:
+                print(rd)
+            return ''
+        if len(argv):
+            tok = argv[0].split(':')
+            for  rd in __ALL_ATTRIBUTES__:
+                 d = {}
+                 d = json.loads(rd)
+                 for b in d.items():
+                     if b[0] == tok[0]:
+                         if len(tok) > 1:
+                             #sloppyness json true/false and python True/False
+                             if tok[1] == 'true':
+                                 tok[1] = 'True'
+                             if tok[1] == 'false':
+                                 tok[1] = 'False'
+                             cmd = tok[0]+":"+tok[1]
+                             return self.communicate(cmd)
+
+                     return rd
+                     #return b
+
